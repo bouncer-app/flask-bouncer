@@ -17,7 +17,6 @@ pip install flask-bouncer
 app = Flask()
 bouncer = Bouncer(app)
 
-
 # Define your authorization in one place and in english ...
 @bouncer.authorization_method
 def define_authorization(user, they):
@@ -28,8 +27,6 @@ def define_authorization(user, they):
     else:
         they.can(READ, Article)
         they.can(EDIT, Article, author_id=user.id)
-
-
 
 # Then decorate your routes with your conditions.  If it fails it will throw a 401
 @app.route("/articles")
