@@ -1,4 +1,4 @@
-flask-bouncer (ALPHA -- probably not even compiling yet)
+flask-bouncer (ALPHA)
 =============
 
 Flask declarative authorization leveraging [bouncer](https://github.com/jtushman/bouncer)
@@ -13,7 +13,7 @@ pip install flask-bouncer
 
 # Usage
 
-```
+```python
 app = Flask()
 bouncer = Bouncer(app)
 
@@ -43,8 +43,8 @@ def topsecret_index():
     return "A bunch of top secret stuff that only admins should see"
 ```
 
-* Check out (bouncer)[https://github.com/jtushman/bouncer] with more details about defining Abilities
-* flask-bouncer looks for `current_user` stored in flask's (g)[http://flask.pocoo.org/docs/api/#flask.g]
+* Check out [bouncer](https://github.com/jtushman/bouncer) with more details about defining Abilities
+* flask-bouncer looks for `current_user` stored in flask's [g](http://flask.pocoo.org/docs/api/#flask.g)
 
 More docs coming soon ...
 
