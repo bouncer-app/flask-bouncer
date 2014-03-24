@@ -13,6 +13,7 @@ setup(name='flask-bouncer',
       py_mocdules=['flask_bouncer'],
       zip_safe=False,
       platforms='any',
+      tests_require=['nose'],
       test_suite='nose.collector',
       classifiers=[
           'Environment :: Web Environment',
