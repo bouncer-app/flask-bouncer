@@ -1,5 +1,9 @@
 *.py[cod]
 
+# PyCharm
+.idea/*
+.idea/libraries/sass_stdlib.xml
+
 # C extensions
 *.so
 
@@ -34,3 +38,5 @@ nosetests.xml
 .mr.developer.cfg
 .project
 .pydevproject
+
+.DS_Store
