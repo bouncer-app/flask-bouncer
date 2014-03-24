@@ -1,6 +1,6 @@
 from setuptools import setup
 
-required_modules = ['bouncer', 'Flask>=0.9']
+required_modules = ['bouncer', 'Flask>=0.9', 'blinker']
 
 setup(name='flask-bouncer',
       version='0.0.1',
