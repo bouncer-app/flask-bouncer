@@ -56,13 +56,13 @@ def test_default():
     jonathan = User(name='jonathan', admin=False)
     with user_set(app, jonathan):
         resp = client.get('/')
-        eq_("Hello World", resp.data)
+        eq_(b"Hello World", resp.data)
 
 def test_allowed_index():
     jonathan = User(name='jonathan', admin=False)
     with user_set(app, jonathan):
         resp = client.get('/articles')
-        eq_("A bunch of articles", resp.data)
+        eq_(b"A bunch of articles", resp.data)
 
 def test_not_allowed_index():
     doug = User(name='doug', admin=False)
