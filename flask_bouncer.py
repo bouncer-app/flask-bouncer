@@ -50,6 +50,8 @@ class Bouncer(object):
 
         self.authorization_method_callback = None
 
+        self.flask_classy_classes = None
+        
     def bounce(self, *classy_routes):
         if self.flask_classy_classes is None:
             self.flask_classy_classes = list()
