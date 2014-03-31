@@ -64,19 +64,43 @@ def test_delete():
         resp = client.delete("/article/1234")
         eq_(resp.status_code, 401)
 
-# def test_get():
-#     resp = client.get("/article/1234")
-#     eq_(b"Get 1234", resp.data)
-#
-# def test_put():
-#     resp = client.put("/article/1234")
-#     eq_(b"Put 1234", resp.data)
-#
-# def test_patch():
-#     resp = client.patch("/article/1234")
-#     eq_(b"Patch 1234", resp.data)
+def test_get():
+    # admins should be able to view
+    with user_set(app, jonathan):
+        resp = client.get("/article/1234")
+        eq_(b"Get 1234", resp.data)
 
-# def test_custom_method():
+    # Non admins should be able to view
+    with user_set(app, nancy):
+        resp = client.get("/article/1234")
+        eq_(b"Get 1234", resp.data)
+
+def test_put():
+    # admins should be able to view
+    with user_set(app, jonathan):
+        resp = client.put("/article/1234")
+        eq_(b"Put 1234", resp.data)
+
+def test_patch():
+    # admins should be able to view
+    with user_set(app, jonathan):
+        resp = client.patch("/article/1234")
+        eq_(b"Patch 1234", resp.data)
+
+
+def test_custom_read_method():
+    # admins should be able to view
+    with user_set(app, jonathan):
+        resp = client.get("/article/custom_read_method/")
+        eq_(b"Custom Method", resp.data)
+
+    # Non admins should be able to view
+    with user_set(app, nancy):
+        resp = client.get("/article/custom_read_method/")
+        eq_(b"Custom Method", resp.data)
+
+
+    # def test_custom_method():
 #     resp = client.get("/article/custom_method/")
 #     eq_(b"Custom Method", resp.data)
 #

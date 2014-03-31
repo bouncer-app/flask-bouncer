@@ -29,7 +29,6 @@ class ArticleView(FlaskView):
     def delete(self, id):
         return "Delete " + id
 
-    @requires(READ, Article)
     def custom_read_method(self):
         return "Custom Method"
 
