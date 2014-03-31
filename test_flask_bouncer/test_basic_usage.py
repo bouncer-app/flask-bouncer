@@ -1,5 +1,5 @@
 from flask import Flask
-from flask_bouncer import Bouncer, bounce, requires
+from flask_bouncer import Bouncer, ensure, requires
 from bouncer.constants import *
 from nose.tools import *
 from .models import Article, TopSecretFile, User
@@ -45,7 +45,7 @@ def edit_post(post_id):
     article = Article(author_id=mary.id)
 
     # bounce them out if they do not have access
-    bounce(EDIT, article)
+    ensure(EDIT, article)
     # edit the post
     return "successfully edited post"
 

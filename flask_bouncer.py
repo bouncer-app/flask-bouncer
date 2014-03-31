@@ -2,17 +2,22 @@ from flask import request, g, current_app
 from werkzeug.exceptions import Unauthorized
 from functools import wraps
 from bouncer import Ability
+from bouncer.constants import *
 
 
-def bounce(action, subject):
+
+
+def ensure(action, subject):
     current_user = get_current_user()
     ability = Ability(current_user)
+    ability.authorization_method = current_app.bouncer.get_authorization_method()
+    ability.alias_actions = current_app.bouncer.alias_actions
     if ability.cannot(action, subject):
         msg = "{} does not have {} access to {}".format(current_user, action, subject)
         raise Unauthorized(msg)
 
 #alais
-ensure = bounce
+bounce = ensure
 
 
 def get_current_user():
@@ -50,16 +55,40 @@ class Bouncer(object):
 
         self.authorization_method_callback = None
 
+        self._alias_actions = self.default_alias_actions
+
+        self._authorization_method = None
+
+    @property
+    def alias_actions(self):
+        return self._alias_actions
+
+    @alias_actions.setter
+    def alias_actions(self, value):
+        """if you want to override your actions"""
+        self._alias_actions = value
+
+    def default_alias_actions(self):
+        return {
+            READ: [INDEX, SHOW, GET],
+            CREATE: [NEW, PUT, POST],
+            UPDATE: [EDIT, PATCH]
+        }
+
     def bounce(self, *classy_routes):
         if self.flask_classy_classes is None:
             self.flask_classy_classes = list()
         self.flask_classy_classes.extend(classy_routes)
 
-
-    def authorization_method(self, callback):
+    def authorization_method(self, value):
         """
         the callback for defining user abilities
         """
-        self.authorization_method_callback = callback
-        Ability.set_authorization_method(self.authorization_method_callback)
-        return callback
+        self._authorization_method = value
+        return self._authorization_method
+
+    def get_authorization_method(self):
+        if self._authorization_method is not None:
+            return self._authorization_method
+        else:
+            raise Exception('Expected authorication method to be set')
