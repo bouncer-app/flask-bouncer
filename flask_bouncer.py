@@ -116,16 +116,6 @@ class Bouncer(object):
             self.flask_classy_classes = list()
         self.flask_classy_classes.extend(classy_routes)
 
-        # for clazz in classy_routes:
-        #     for key, value in inspect.getmembers(clazz):
-        #         if inspect.ismethod(value):
-        #             print "Member: {} {}".format(key, value)
-        #             if hasattr(value, '_explict_rule_set'):
-        #                 print "!!!!!!! >>>>>> Member: {} {}".format(key, value)
-        #                 import pdb; pdb.set_trace()
-        #                 self.explict_rules.append('a')
-
-
     def authorization_method(self, value):
         """
         the callback for defining user abilities
