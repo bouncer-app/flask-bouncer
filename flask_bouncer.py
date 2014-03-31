@@ -23,6 +23,8 @@ bounce = ensure
 def get_current_user():
     if hasattr(g, 'current_user'):
         return g.current_user
+    elif hasattr(g, 'user'):
+        return g.user
     else:
         raise Exception("Excepting current_user on flask's g")
 
