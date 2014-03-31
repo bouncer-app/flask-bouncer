@@ -3,7 +3,7 @@ from flask_bouncer import Bouncer, bounce
 from test_flask_bouncer.models import Article, User
 from test_flask_bouncer.helpers import user_set
 from bouncer.constants import *
-from .view_classes import ArticleView
+from .view_classes import ArticleView, OverwrittenView
 
 from nose.tools import *
 
@@ -52,7 +52,6 @@ def test_post():
         resp = client.post("/article/")
         eq_(b"Post", resp.data)
 
-
 def test_delete():
     # Admin should be able to delete articles
     with user_set(app, jonathan):
@@ -87,7 +86,6 @@ def test_patch():
         resp = client.patch("/article/1234")
         eq_(b"Patch 1234", resp.data)
 
-
 def test_custom_read_method():
     # admins should be able to view
     with user_set(app, jonathan):
@@ -99,36 +97,38 @@ def test_custom_read_method():
         resp = client.get("/article/custom_read_method/")
         eq_(b"Custom Method", resp.data)
 
+def test_overwritten_get():
+    app = Flask("overwritten")
+    bouncer = Bouncer(app)
+    OverwrittenView.register(app)
 
-    # def test_custom_method():
-#     resp = client.get("/article/custom_method/")
-#     eq_(b"Custom Method", resp.data)
-#
-# def test_custom_method_with_params():
-#     resp = client.get("/article/custom_method_with_params/1234/abcd")
-#     eq_(b"Custom Method 1234 abcd", resp.data)
-#
-# def test_routed_method():
-#     resp = client.get("/article/routed/")
-#     eq_(b"Routed Method", resp.data)
-#
-# def test_multi_routed_method():
-#     resp = client.get("/article/route1/")
-#     eq_(b"Multi Routed Method", resp.data)
-#
-#     resp = client.get("/article/route2/")
-#     eq_(b"Multi Routed Method", resp.data)
-#
-# def test_no_slash():
-#     resp = client.get("/article/noslash")
-#     eq_(b"No Slash Method", resp.data)
-#
-#
-# def test_custom_http_method():
-#     resp = client.post("/article/route3/")
-#     eq_(b"Custom HTTP Method", resp.data)
+    # Which classy views do you want to lock down, you can pass multiple
+    bouncer.monitor(OverwrittenView)
 
+    @bouncer.authorization_method
+    def define_authorization(user, abilities):
 
+        if user.is_admin:
+            # self.can_manage(ALL)
+            abilities.append(MANAGE, ALL)
+        else:
+            abilities.append([READ, CREATE], Article)
+            abilities.append(EDIT, Article, author_id=user.id)
+
+    client = app.test_client()
+
+    jonathan = User(name='jonathan', admin=True)
+    nancy = User(name='nancy', admin=False)
+
+    # admins should be able to view
+    with user_set(app, jonathan):
+        resp = client.get("/overwritten/1234")
+        eq_(b"Get 1234", resp.data)
+
+    # Non admins should be able to view
+    with user_set(app, nancy):
+        resp = client.get("/overwritten/1234")
+        eq_(resp.status_code, 401)
 
 
 

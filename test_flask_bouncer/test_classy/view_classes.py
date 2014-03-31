@@ -29,6 +29,7 @@ class ArticleView(FlaskView):
     def delete(self, id):
         return "Delete " + id
 
+    @requires(READ, Article)
     def custom_read_method(self):
         return "Custom Method"
 
@@ -55,3 +56,10 @@ class ArticleView(FlaskView):
     @route("/route3/", methods=['POST'])
     def custom_http_method(self):
         return "Custom HTTP Method"
+
+
+class OverwrittenView(ArticleView):
+
+    @requires(DELETE, Article)
+    def get(self, obj_id):
+        return "Get " + obj_id
