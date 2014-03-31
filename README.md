@@ -14,6 +14,7 @@ pip install flask-bouncer
 # Usage
 
 ```python
+from flask.ext.bouncer import requires, ensure, Bouncer
 app = Flask()
 bouncer = Bouncer(app)
 
@@ -26,7 +27,11 @@ def define_authorization(user, they):
         they.can(MANAGE, ALL)
     else:
         they.can(READ, Article)
-        they.can(EDIT, Article, author_id=user.id)
+
+        def if_author(article):
+            return article.author_id = user.id
+
+        they.can(EDIT, Article, if_author)
 
 # Then decorate your routes with your conditions.  If it fails it will throw a 401
 @app.route("/articles")
@@ -40,10 +45,29 @@ def topsecret_index():
     return "A bunch of top secret stuff that only admins should see"
 ```
 
-* Check out [bouncer](https://github.com/jtushman/bouncer) with more details about defining Abilities
-* flask-bouncer looks for `current_user` stored in flask's [g](http://flask.pocoo.org/docs/api/#flask.g)
+# When you are dealing with a specific resource, then use the `ensure` method
 
-More docs coming soon ...
+```python
+from flask.ext.bouncer import requires, ensure
+@app.route("/articles/<article_id>")
+@requires(READ, Article)
+def show_article(article_id):
+    article = Article.find_by_id(article_id)
+
+    # can the current user 'read' the article, if not it will throw a 401
+    ensure(READ,article)
+    return render_template('article.html',article=article)
+```
+
+
+* Check out [bouncer](https://github.com/jtushman/bouncer) with more details about defining Abilities
+* flask-bouncer looks for `current_user` or `user` stored in flask's [g](http://flask.pocoo.org/docs/api/#flask.g)
+
+Other Features:
+
+* Plays nice with [flask-login](http://flask-login.readthedocs.org/en/latest/)
+* Plays nice with blueprints
+* Plays nice with [flask-classy](https://pythonhosted.org/Flask-Classy/)
 
 # Roadmap
 * flask-classy support
