@@ -60,6 +60,8 @@ class ArticleView(FlaskView):
 
 class OverwrittenView(ArticleView):
 
+    # adding stricker rules on this get
+    # to test that you can overwrite the default behavior
     @requires(DELETE, Article)
     def get(self, obj_id):
         return "Get " + obj_id

@@ -39,6 +39,7 @@ class Condition(object):
 
 def requires(action, subject):
     def decorator(f):
+        f._explict_rule_set = True
         @wraps(f)
         def decorated_function(*args, **kwargs):
             Condition(action, subject).test()
@@ -63,6 +64,8 @@ class Bouncer(object):
 
         self.flask_classy_classes = None
 
+        self.explict_rules = list()
+
         app.before_request(self.check_implicit_rules)
 
     def check_implicit_rules(self):
@@ -72,10 +75,17 @@ class Bouncer(object):
         if not self.request_is_managed_by_flask_classy():
             return
 
+        if self.method_is_explictly_overwritten():
+            return
+
         class_name, action = request.endpoint.split(':')
         clazz = [classy_class for classy_class in self.flask_classy_classes if classy_class.__name__ == class_name][0]
         Condition(action, clazz.__target_model__).test()
 
+
+    def method_is_explictly_overwritten(self):
+        view_func = current_app.view_functions[request.endpoint]
+        return hasattr(view_func,'_explict_rule_set') and view_func._explict_rule_set is True
 
     def request_is_managed_by_flask_classy(self):
         if ':' not in request.endpoint:
@@ -105,6 +115,16 @@ class Bouncer(object):
         if self.flask_classy_classes is None:
             self.flask_classy_classes = list()
         self.flask_classy_classes.extend(classy_routes)
+
+        # for clazz in classy_routes:
+        #     for key, value in inspect.getmembers(clazz):
+        #         if inspect.ismethod(value):
+        #             print "Member: {} {}".format(key, value)
+        #             if hasattr(value, '_explict_rule_set'):
+        #                 print "!!!!!!! >>>>>> Member: {} {}".format(key, value)
+        #                 import pdb; pdb.set_trace()
+        #                 self.explict_rules.append('a')
+
 
     def authorization_method(self, value):
         """
