@@ -6,7 +6,7 @@ from bouncer.constants import *
 
 
 def ensure(action, subject):
-    current_user = get_current_user()
+    current_user = current_app.bouncer.get_current_user()
     ability = Ability(current_user)
     ability.authorization_method = current_app.bouncer.get_authorization_method()
     ability.aliased_actions = current_app.bouncer.alias_actions
@@ -16,16 +16,6 @@ def ensure(action, subject):
 
 #alais
 bounce = ensure
-
-
-def get_current_user():
-    if hasattr(g, 'current_user'):
-        return g.current_user
-    elif hasattr(g, 'user'):
-        return g.user
-    else:
-        raise Exception("Excepting current_user on flask's g")
-
 
 class Condition(object):
 
@@ -66,6 +56,8 @@ class Bouncer(object):
 
         self.explict_rules = list()
 
+        self.get_current_user = self.default_user_loader
+
         app.before_request(self.check_implicit_rules)
 
     def check_implicit_rules(self):
@@ -93,6 +85,23 @@ class Bouncer(object):
         class_name, action = request.endpoint.split(':')
         return any(class_name == classy_class.__name__ for classy_class in self.flask_classy_classes) \
             and action in self.special_methods
+
+
+    def default_user_loader(self):
+        if hasattr(g, 'current_user'):
+            return g.current_user
+        elif hasattr(g, 'user'):
+            return g.user
+        else:
+            raise Exception("Excepting current_user on flask's g")
+
+
+    def user_loader(self, value):
+        """
+        Use this method decorator to overwrite the default user loader
+        """
+        self.get_current_user = value
+        return value
 
 
     @property
