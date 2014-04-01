@@ -1,9 +1,9 @@
 from setuptools import setup
 
-required_modules = ['bouncer>=0.1.6', 'Flask>=0.9', 'blinker']
+required_modules = ['bouncer>=0.1.8', 'Flask>=0.9', 'blinker']
 
 setup(name='flask-bouncer',
-      version='0.1.7',
+      version='0.1.8',
       description='Flask Simple Declarative Authentication based on Ryan Bates excellent cancan library',
       url='http://github.com/jtushman/flask-bouncer',
       author='Jonathan Tushman',
@@ -13,7 +13,7 @@ setup(name='flask-bouncer',
       py_modules=['flask_bouncer'],
       zip_safe=False,
       platforms='any',
-      tests_require=['nose','flask-classy'],
+      tests_require=['nose','flask-classy>=0.6.9'],
       test_suite='nose.collector',
       classifiers=[
           'Environment :: Web Environment',

@@ -52,7 +52,7 @@ class Bouncer(object):
 
         self._authorization_method = None
 
-        self.flask_classy_classes = None
+        self.flask_classy_classes = list()
 
         self.explict_rules = list()
 
@@ -121,8 +121,6 @@ class Bouncer(object):
         }
 
     def monitor(self, *classy_routes):
-        if self.flask_classy_classes is None:
-            self.flask_classy_classes = list()
         self.flask_classy_classes.extend(classy_routes)
 
     def authorization_method(self, value):
