@@ -5,6 +5,11 @@ Flask declarative authorization leveraging [bouncer](https://github.com/jtushman
 
 [![Build Status](https://travis-ci.org/jtushman/flask-bouncer.svg?branch=master)](https://travis-ci.org/jtushman/flask-bouncer)
 
+**flask-bouncer** is an authorization library for Flask which restricts what resources a given user is allowed to access.  All the permissions are defined in a single location.
+
+Enough chit-chat -- show me the code ...
+
+
 ## Installation
 
 ```bash
@@ -45,7 +50,7 @@ def topsecret_index():
     return "A bunch of top secret stuff that only admins should see"
 ```
 
-## When you are dealing with a specific resource, then use the `ensure` method
+* When you are dealing with a specific resource, then use the `ensure` method
 
 ```python
 from flask.ext.bouncer import requires, ensure
@@ -125,6 +130,11 @@ function with `@bouncer.user_loader`
 ## Notes:
 
 * This library focusing only on **Authorization**, we leave **Authentication** to other libraries such as [flask-login](http://flask-login.readthedocs.org/en/latest/).
+
+## Thank You!
+
+* Ryan Bates, and his excellent CanCan ruby library which this the inspiration for this library
+
 
 
 
