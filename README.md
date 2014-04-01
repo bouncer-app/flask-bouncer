@@ -69,7 +69,7 @@ def show_article(article_id):
 * flask-bouncer by default looks for `current_user` or `user` stored in flask's [g](http://flask.pocoo.org/docs/api/#flask.g)
 
 ## Flask-Classy Support
-I ❤ Flask-Classy. Like a lot.  Flask-Classy is an extension that adds class-based REST views to Flask.
+I ❤ [Flask-Classy](https://pythonhosted.org/Flask-Classy/) Like a lot.  Flask-Classy is an extension that adds class-based REST views to Flask.
 
 ### 1) Define you View similarly as you would with flask-classy
 
