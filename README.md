@@ -5,7 +5,7 @@ Flask declarative authorization leveraging [bouncer](https://github.com/jtushman
 
 [![Build Status](https://travis-ci.org/jtushman/flask-bouncer.svg?branch=master)](https://travis-ci.org/jtushman/flask-bouncer)
 
-**flask-bouncer** is an authorization library for Flask which restricts what resources a given user is allowed to access.  All the permissions are defined in a single location.
+**flask-bouncer** is an authorization library for Flask which restricts what resources a given user is allowed to access.  All the permissions are defined in a **single location**.
 
 Enough chit-chat -- show me the code ...
 
