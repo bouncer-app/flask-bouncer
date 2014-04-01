@@ -26,19 +26,14 @@ bouncer = Bouncer(app)
 # Define your authorization in one place and in english ...
 @bouncer.authorization_method
 def define_authorization(user, they):
-
     if user.is_admin:
-        # self.can_manage(ALL)
         they.can(MANAGE, ALL)
     else:
         they.can(READ, 'Article')
+        they.can(EDIT, 'Article', lambda a: a.author_id == user.id)
 
-        def if_author(article):
-            return article.author_id = user.id
-
-        they.can(EDIT, 'Article', if_author)
-
-# Then decorate your routes with your conditions.  If it fails it will throw a 401
+# Then decorate your routes with your conditions.  
+# If it fails it will return a 401
 @app.route("/articles")
 @requires(READ, Article)
 def articles_index():
