@@ -1,17 +1,17 @@
-flask-bouncer (ALPHA)
+flask-bouncer
 =============
 
 Flask declarative authorization leveraging [bouncer](https://github.com/jtushman/bouncer)
 
 [![Build Status](https://travis-ci.org/jtushman/flask-bouncer.svg?branch=master)](https://travis-ci.org/jtushman/flask-bouncer)
 
-# Installation
+## Installation
 
 ```bash
 pip install flask-bouncer
 ```
 
-# Usage
+## Usage
 
 ```python
 from flask.ext.bouncer import requires, ensure, Bouncer
@@ -26,12 +26,12 @@ def define_authorization(user, they):
         # self.can_manage(ALL)
         they.can(MANAGE, ALL)
     else:
-        they.can(READ, Article)
+        they.can(READ, 'Article')
 
         def if_author(article):
             return article.author_id = user.id
 
-        they.can(EDIT, Article, if_author)
+        they.can(EDIT, 'Article', if_author)
 
 # Then decorate your routes with your conditions.  If it fails it will throw a 401
 @app.route("/articles")
@@ -45,7 +45,7 @@ def topsecret_index():
     return "A bunch of top secret stuff that only admins should see"
 ```
 
-# When you are dealing with a specific resource, then use the `ensure` method
+## When you are dealing with a specific resource, then use the `ensure` method
 
 ```python
 from flask.ext.bouncer import requires, ensure
@@ -61,17 +61,72 @@ def show_article(article_id):
 
 
 * Check out [bouncer](https://github.com/jtushman/bouncer) with more details about defining Abilities
-* flask-bouncer looks for `current_user` or `user` stored in flask's [g](http://flask.pocoo.org/docs/api/#flask.g)
+* flask-bouncer by default looks for `current_user` or `user` stored in flask's [g](http://flask.pocoo.org/docs/api/#flask.g)
 
-Other Features:
+## Flask-Classy Support
+I ❤ Flask-Classy. Like a lot.  Flask-Classy is an extension that adds class-based REST views to Flask.
+
+### 1) Define you View similarly as you would with flask-classy
+
+```python
+from flask.ext.classy import FlaskView
+from yourapp.models import Article
+
+class ArticleView(FlaskView)
+
+	# an additional class attribute that you need to add for flask-bouncer
+	__target_model__ = Article
+	
+	def index(self)
+		return "Index"
+		
+	def get(self, obj_id):
+		return "Get "
+		
+	# ... methods for post, delete (and even put, and patch if you so like		
+```
+
+### 2) Register the View with flask and bouncer
+
+
+```python
+# in your application.py or the like
+
+app = Flask("classy")
+bouncer = Bouncer(app)
+ArticleView.register(app)
+
+# Which classy views do you want to lock down, you can pass multiple
+bouncer.monitor(ArticleView)
+
+```
+
+Then voila -- flask-bouncer will implicitly add the following conditions to the routes:
+
+* You need 'READ' privileges for 'index','show' and 'get'
+* You need 'CREATE' privileges for 'new','put' and 'post'
+* You need 'UPDATE' privileges for 'edit' and 'patch'
+
+If you want to over-write the default requirements, just add the `@requires` decorator to the function
+
+## Configuration
+
+### current_user
+By default flask-bouncer will inspect `g` for user or current_user.  You can add your custom loader by decorating a
+function with `@bouncer.user_loader`
+
+
+## Other Features:
 
 * Plays nice with [flask-login](http://flask-login.readthedocs.org/en/latest/)
 * Plays nice with blueprints
 * Plays nice with [flask-classy](https://pythonhosted.org/Flask-Classy/)
 
-# Roadmap
-* flask-classy support
-* blueprint support
+## Notes:
+
+* This library focusing only on **Authorization**, we leave **Authentication** to other libraries such as [flask-login](http://flask-login.readthedocs.org/en/latest/).
+
+
 
 ## Questions / Issues
-Feel free to ping me on twitter: [@tushman](http://twitter.com/tushman) or add issues or PRs at [https://github.com/jtushman/bouncer](https://github.com/jtushman/state_machine)
+Feel free to ping me on twitter: [@tushman](http://twitter.com/tushman) or add issues or PRs at [https://github.com/jtushman/bouncer](https://github.com/jtushman/flask-bouncer)
