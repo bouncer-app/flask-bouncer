@@ -61,7 +61,7 @@ def show_article(article_id):
 
     # can the current user 'read' the article, if not it will throw a 401
     ensure(READ,article)
-    return render_template('article.html',article=article)
+    return render_template('article.html', article=article)
 ```
 
 
