@@ -80,6 +80,8 @@ class Bouncer(object):
         return hasattr(view_func,'_explict_rule_set') and view_func._explict_rule_set is True
 
     def request_is_managed_by_flask_classy(self):
+        if request.endpoint is None:
+            return False
         if ':' not in request.endpoint:
             return False
         class_name, action = request.endpoint.split(':')
