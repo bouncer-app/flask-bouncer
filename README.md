@@ -29,7 +29,7 @@ def define_authorization(user, they):
     if user.is_admin:
         they.can(MANAGE, ALL)
     else:
-        they.can(READ, 'Article')
+        they.can(READ, ('Article', 'BlogPost'))
         they.can(EDIT, 'Article', lambda a: a.author_id == user.id)
 
 # Then decorate your routes with your conditions.  
