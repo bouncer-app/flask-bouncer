@@ -38,7 +38,7 @@ def requires(action, subject):
     return decorator
 
 class Bouncer(object):
-    """Thie class is used to control the Abilities Integration to one or more Flask applications"""
+    """This class is used to control the Abilities Integration to one or more Flask applications"""
 
     special_methods = ["get", "put", "patch", "post", "delete", "index"]
 
