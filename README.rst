@@ -113,7 +113,7 @@ class-based REST views to Flask.
 .. _Flask-Classy: https://pythonhosted.org/Flask-Classy/
 
 .. |Build Status| image:: https://travis-ci.org/jtushman/flask-bouncer.svg?branch=master
-:target: https://travis-ci.org/jtushman/flask-bouncer
+    :target: https://travis-ci.org/jtushman/flask-bouncer
 
 Then voila – flask-bouncer will implicitly add the following conditions
 to the routes:
@@ -164,7 +164,3 @@ or add issues or PRs at `https://github.com/jtushman/bouncer`_
 .. _flask-classy: https://pythonhosted.org/Flask-Classy/
 .. _`https://github.com/jtushman/bouncer`: https://github.com/jtushman/flask-bouncer
 .. _@tushman: http://twitter.com/tushman
-
-
-.. toctree::
-:maxdepth: 1
