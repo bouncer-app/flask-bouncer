@@ -21,8 +21,7 @@ import os
 #sys.path.insert(0, os.path.abspath('.'))
 sys.path.append(os.path.abspath('_themes'))
 html_theme_path = ['_themes']
-html_theme = 'flask'
-github_fork = 'jtushman/flask-bouncer'
+html_theme = 'flask_small'
 
 # -- General configuration ------------------------------------------------
 

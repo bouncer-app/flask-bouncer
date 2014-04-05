@@ -135,15 +135,15 @@ By default flask-bouncer will inspect ``g`` for user or current\_user.
 You can add your custom loader by decorating a function with
 ``@bouncer.user_loader``
 
-Other Features:
----------------
+Other Features
+--------------
 
 -  Plays nice with `flask-login`_
 -  Plays nice with blueprints
 -  Plays nice with `flask-classy`_
 
-Notes:
-------
+Notes
+-----
 
 -  This library focusing only on **Authorization**, we leave
    **Authentication** to other libraries such as `flask-login`_.
@@ -167,4 +167,4 @@ or add issues or PRs at `https://github.com/jtushman/bouncer`_
 
 
 .. toctree::
-   :maxdepth: 2
+:maxdepth: 1

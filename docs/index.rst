@@ -94,6 +94,7 @@ class-based REST views to Flask.
 
         # ... methods for post, delete (and even put, and patch if you so like
 
+
 2) Register the View with flask and bouncer
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -135,15 +136,15 @@ By default flask-bouncer will inspect ``g`` for user or current\_user.
 You can add your custom loader by decorating a function with
 ``@bouncer.user_loader``
 
-Other Features:
----------------
+Other Features
+--------------
 
 -  Plays nice with `flask-login`_
 -  Plays nice with blueprints
 -  Plays nice with `flask-classy`_
 
-Notes:
-------
+Notes
+-----
 
 -  This library focusing only on **Authorization**, we leave
    **Authentication** to other libraries such as `flask-login`_.
