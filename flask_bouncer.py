@@ -11,7 +11,7 @@ def ensure(action, subject):
     ability.authorization_method = current_app.bouncer.get_authorization_method()
     ability.aliased_actions = current_app.bouncer.alias_actions
     if ability.cannot(action, subject):
-        msg = "{} does not have {} access to {}".format(current_user, action, subject)
+        msg = "{0} does not have {1} access to {2}".format(current_user, action, subject)
         raise Unauthorized(msg)
 
 #alais
