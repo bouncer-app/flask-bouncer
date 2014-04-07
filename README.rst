@@ -94,6 +94,7 @@ class-based REST views to Flask.
 
         # ... methods for post, delete (and even put, and patch if you so like
 
+
 2) Register the View with flask and bouncer
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -113,7 +114,7 @@ class-based REST views to Flask.
 .. _Flask-Classy: https://pythonhosted.org/Flask-Classy/
 
 .. |Build Status| image:: https://travis-ci.org/jtushman/flask-bouncer.svg?branch=master
-:target: https://travis-ci.org/jtushman/flask-bouncer
+    :target: https://travis-ci.org/jtushman/flask-bouncer
 
 Then voila – flask-bouncer will implicitly add the following conditions
 to the routes:
@@ -158,13 +159,8 @@ Questions / Issues
 ------------------
 
 Feel free to ping me on twitter: `@tushman`_
-or add issues or PRs at `https://github.com/jtushman/bouncer`_
+or add issues or PRs at https://github.com/jtushman/flask-bouncer
 
 .. _flask-login: http://flask-login.readthedocs.org/en/latest/
 .. _flask-classy: https://pythonhosted.org/Flask-Classy/
-.. _`https://github.com/jtushman/bouncer`: https://github.com/jtushman/flask-bouncer
 .. _@tushman: http://twitter.com/tushman
-
-
-.. toctree::
-:maxdepth: 1

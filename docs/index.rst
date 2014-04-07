@@ -159,11 +159,10 @@ Questions / Issues
 ------------------
 
 Feel free to ping me on twitter: `@tushman`_
-or add issues or PRs at `https://github.com/jtushman/bouncer`_
+or add issues or PRs at https://github.com/jtushman/flask-bouncer
 
 .. _flask-login: http://flask-login.readthedocs.org/en/latest/
 .. _flask-classy: https://pythonhosted.org/Flask-Classy/
-.. _`https://github.com/jtushman/bouncer`: https://github.com/jtushman/flask-bouncer
 .. _@tushman: http://twitter.com/tushman
 
 
