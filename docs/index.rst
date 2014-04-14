@@ -80,7 +80,6 @@ This will check each request to ensure that an authorization check (either `ensu
 
 If you want to skip a certain route, decorate your route with `@skip_authorization`.  Like so:
 
-
 .. code:: python
 
     @app.route("/articles")
