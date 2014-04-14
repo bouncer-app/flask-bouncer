@@ -67,6 +67,27 @@ Usage
 -  flask-bouncer by default looks for ``current_user`` or ``user``
    stored in flask’s `g`_
 
+Lock It Down
+------------
+You can use the `ensure_authorization` feature to ensure that all of your routes in your application have been
+authorized
+
+.. code:: python
+
+    bouncer = Bouncer(app, ensure_authorization=True)
+
+This will check each request to ensure that an authorization check (either `ensure` or `requires`) has been made
+
+If you want to skip a certain route, decorate your route with `@skip_authorization`.  Like so:
+
+.. code:: python
+
+    @app.route("/articles")
+    @skip_authorization
+    def articles_index():
+        return "A bunch of articles"
+
+
 Flask-Classy Support
 --------------------
 

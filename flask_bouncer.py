@@ -6,6 +6,7 @@ from bouncer.constants import *
 
 
 def ensure(action, subject):
+    request._authorized = True
     current_user = current_app.bouncer.get_current_user()
     ability = Ability(current_user)
     ability.authorization_method = current_app.bouncer.get_authorization_method()
@@ -37,12 +38,21 @@ def requires(action, subject):
         return decorated_function
     return decorator
 
+
+def skip_authorization(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        request._authorized = True
+        return f(*args, **kwargs)
+    return decorated_function
+
+
 class Bouncer(object):
     """This class is used to control the Abilities Integration to one or more Flask applications"""
 
     special_methods = ["get", "put", "patch", "post", "delete", "index"]
 
-    def __init__(self, app):
+    def __init__(self, app, **kwargs):
         self.app = app
         app.bouncer = self
 
@@ -59,6 +69,18 @@ class Bouncer(object):
         self.get_current_user = self.default_user_loader
 
         app.before_request(self.check_implicit_rules)
+
+        if kwargs.get('ensure_authorization', False):
+            app.after_request(self.check_authorization)
+
+
+    def check_authorization(self, response):
+        """checks that an authorization call has been made during the request"""
+        if not hasattr(request, '_authorized'):
+            raise Unauthorized
+        elif not request._authorized:
+            raise Unauthorized
+        return response
 
     def check_implicit_rules(self):
         """ if you are using flask classy are using the standard index,new,put,post, etc ... type routes, we will
