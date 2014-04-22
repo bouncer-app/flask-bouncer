@@ -18,6 +18,3 @@ def test_delayed_init():
     bouncer.init_app(app)
 
     eq_(bouncer.get_app(), app)
-
-
-
