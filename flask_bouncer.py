@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 from functools import wraps
 
-from flask import request, g, current_app
+from flask import request, g, current_app, _app_ctx_stack as stack
 from werkzeug.local import LocalProxy
 from werkzeug.exceptions import Unauthorized
 from bouncer import Ability
@@ -82,7 +82,7 @@ class Bouncer(object):
         if self.app is not None:
             return self.app
 
-        ctx = connection_stack.top
+        ctx = stack.top
 
         if ctx is not None:
             return ctx.app
@@ -91,21 +91,28 @@ class Bouncer(object):
                            ' instance and no application bound'
                            ' to current context')
 
+
     def init_app(self, app, **kwargs):
         """ Initializes the Flask-Bouncer extension for the specified application.
 
         :param app: The application.
         """
+        self.app = app
 
-        if not hasattr(app, 'extensions'):
-            app.extensions = {}
+        self._init_extension()
 
-        app.before_request(self.check_implicit_rules)
+        self.app.before_request(self.check_implicit_rules)
 
         if kwargs.get('ensure_authorization', False):
-            app.after_request(self.check_authorization)
+            self.app.after_request(self.check_authorization)
 
-        app.extensions['bouncer'] = self
+
+    def _init_extension(self):
+        if not hasattr(self.app, 'extensions'):
+            self.app.extensions = dict()
+
+        self.app.extensions['bouncer'] = self
+
 
     def check_authorization(self, response):
         """checks that an authorization call has been made during the request"""
