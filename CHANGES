@@ -1,0 +1,7 @@
+Version 0.1.13
+--------------
+
+- Adds init_app method
+- More standard way of registering extensions
+- Added AUTHORS file
+- Added CHANGES file
