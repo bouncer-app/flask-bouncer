@@ -1,22 +1,31 @@
-from flask import request, g, current_app
-from werkzeug.exceptions import Unauthorized
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 from functools import wraps
+
+from flask import request, g, current_app, _app_ctx_stack as stack
+from werkzeug.local import LocalProxy
+from werkzeug.exceptions import Unauthorized
 from bouncer import Ability
 from bouncer.constants import *
 
 
+# Convenient references
+_bouncer = LocalProxy(lambda: current_app.extensions['bouncer'])
+
+
 def ensure(action, subject):
     request._authorized = True
-    current_user = current_app.bouncer.get_current_user()
+    current_user = _bouncer.get_current_user()
     ability = Ability(current_user)
-    ability.authorization_method = current_app.bouncer.get_authorization_method()
-    ability.aliased_actions = current_app.bouncer.alias_actions
+    ability.authorization_method = _bouncer.get_authorization_method()
+    ability.aliased_actions = _bouncer.alias_actions
     if ability.cannot(action, subject):
         msg = "{0} does not have {1} access to {2}".format(current_user, action, subject)
         raise Unauthorized(msg)
 
-#alais
+# alais
 bounce = ensure
+
 
 class Condition(object):
 
@@ -31,6 +40,7 @@ class Condition(object):
 def requires(action, subject):
     def decorator(f):
         f._explict_rule_set = True
+
         @wraps(f)
         def decorated_function(*args, **kwargs):
             Condition(action, subject).test()
@@ -48,31 +58,62 @@ def skip_authorization(f):
 
 
 class Bouncer(object):
+
     """This class is used to control the Abilities Integration to one or more Flask applications"""
 
     special_methods = ["get", "put", "patch", "post", "delete", "index"]
 
-    def __init__(self, app, **kwargs):
-        self.app = app
-        app.bouncer = self
+    def __init__(self, app=None, **kwargs):
 
         self.authorization_method_callback = None
-
         self._alias_actions = self.default_alias_actions()
-
         self._authorization_method = None
-
         self.flask_classy_classes = list()
-
         self.explict_rules = list()
-
         self.get_current_user = self.default_user_loader
 
-        app.before_request(self.check_implicit_rules)
+        self.app = None
+
+        if app is not None:
+            self.init_app(app, **kwargs)
+
+    def get_app(self, reference_app=None):
+        """Helper method that implements the logic to look up an application."""
+
+        if reference_app is not None:
+            return reference_app
+
+        if self.app is not None:
+            return self.app
+
+        ctx = stack.top
+
+        if ctx is not None:
+            return ctx.app
+
+        raise RuntimeError('Application not registered on Bouncer'
+                           ' instance and no application bound'
+                           ' to current context')
+
+    def init_app(self, app, **kwargs):
+        """ Initializes the Flask-Bouncer extension for the specified application.
+
+        :param app: The application.
+        """
+        self.app = app
+
+        self._init_extension()
+
+        self.app.before_request(self.check_implicit_rules)
 
         if kwargs.get('ensure_authorization', False):
-            app.after_request(self.check_authorization)
+            self.app.after_request(self.check_authorization)
 
+    def _init_extension(self):
+        if not hasattr(self.app, 'extensions'):
+            self.app.extensions = dict()
+
+        self.app.extensions['bouncer'] = self
 
     def check_authorization(self, response):
         """checks that an authorization call has been made during the request"""
@@ -96,10 +137,9 @@ class Bouncer(object):
         clazz = [classy_class for classy_class in self.flask_classy_classes if classy_class.__name__ == class_name][0]
         Condition(action, clazz.__target_model__).test()
 
-
     def method_is_explictly_overwritten(self):
         view_func = current_app.view_functions[request.endpoint]
-        return hasattr(view_func,'_explict_rule_set') and view_func._explict_rule_set is True
+        return hasattr(view_func, '_explict_rule_set') and view_func._explict_rule_set is True
 
     def request_is_managed_by_flask_classy(self):
         if request.endpoint is None:
@@ -110,7 +150,6 @@ class Bouncer(object):
         return any(class_name == classy_class.__name__ for classy_class in self.flask_classy_classes) \
             and action in self.special_methods
 
-
     def default_user_loader(self):
         if hasattr(g, 'current_user'):
             return g.current_user
@@ -119,14 +158,12 @@ class Bouncer(object):
         else:
             raise Exception("Excepting current_user on flask's g")
 
-
     def user_loader(self, value):
         """
         Use this method decorator to overwrite the default user loader
         """
         self.get_current_user = value
         return value
-
 
     @property
     def alias_actions(self):
