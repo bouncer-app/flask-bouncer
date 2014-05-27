@@ -1,5 +1,5 @@
 from flask import Flask
-from flask_bouncer import Bouncer, ensure, requires
+from flask_bouncer import Bouncer, ensure, can, requires
 from bouncer.constants import *
 from nose.tools import *
 from .models import Article, TopSecretFile, User
@@ -50,6 +50,18 @@ def edit_post(post_id):
     return "successfully edited post"
 
 
+@app.route("/article/<int:post_id>", methods=['GET'])
+def view_post(post_id):
+    # Find an article form a db -- faking for testing
+    mary = User(id=1000, name='mary', admin=False)
+    article = Article(author_id=mary.id)
+
+    if can(EDIT, article):
+        return "Click here to edit this article"
+    else:
+        return "Look at this pretty article"
+
+
 client = app.test_client()
 
 def test_default():
@@ -75,3 +87,15 @@ def test_securing_specific_object():
     with user_set(app, doug):
         resp = client.post('/article/1')
         eq_(resp.status_code, 403)
+
+def test_no_custom_content_for_unauthorized_user():
+    doug = User(name='doug', admin=False)
+    with user_set(app, doug):
+        resp = client.get('/article/1')
+        eq_(b"Look at this pretty article", resp.data)
+
+def test_custom_content_for_authorized_user():
+    mary = User(id=1000, name='mary', admin=False)
+    with user_set(app, mary):
+        resp = client.get('/article/1')
+        eq_(b"Click here to edit this article", resp.data)
