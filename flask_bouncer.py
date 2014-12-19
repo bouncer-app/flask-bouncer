@@ -4,7 +4,7 @@ from functools import wraps
 
 from flask import request, g, current_app, _app_ctx_stack as stack
 from werkzeug.local import LocalProxy
-from werkzeug.exceptions import Unauthorized
+from werkzeug.exceptions import Forbidden
 from bouncer import Ability
 from bouncer.constants import *
 
@@ -21,7 +21,7 @@ def ensure(action, subject):
     ability.aliased_actions = _bouncer.alias_actions
     if ability.cannot(action, subject):
         msg = "{0} does not have {1} access to {2}".format(current_user, action, subject)
-        raise Unauthorized(msg)
+        raise Forbidden(msg)
 
 # alais
 bounce = ensure
@@ -118,9 +118,9 @@ class Bouncer(object):
     def check_authorization(self, response):
         """checks that an authorization call has been made during the request"""
         if not hasattr(request, '_authorized'):
-            raise Unauthorized
+            raise Forbidden
         elif not request._authorized:
-            raise Unauthorized
+            raise Forbidden
         return response
 
     def check_implicit_rules(self):

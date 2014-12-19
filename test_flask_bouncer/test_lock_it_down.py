@@ -1,12 +1,12 @@
 from flask import Flask
 from flask_bouncer import Bouncer, requires, skip_authorization, ensure
-from werkzeug.exceptions import Unauthorized
+from werkzeug.exceptions import Forbidden
 from bouncer.constants import *
 from nose.tools import *
 from .models import Article, User
 from .helpers import user_set
 
-@raises(Unauthorized)
+@raises(Forbidden)
 def test_lock_it_down_raise_exception():
 
     app = Flask("test_lock_it_down_raise_exception")
@@ -17,7 +17,7 @@ def test_lock_it_down_raise_exception():
     def define_authorization(user, they):
         they.can('browse', Article)
 
-    # Non decorated route -- should raise an Unauthorized
+    # Non decorated route -- should raise an Forbidden
     @app.route("/articles")
     def articles_index():
         return "A bunch of articles"
@@ -79,7 +79,7 @@ def test_bypass_route():
     def define_authorization(user, they):
         they.can('browse', Article)
 
-    # Non decorated route -- should raise an Unauthorized
+    # Non decorated route -- should raise an Forbidden
     @app.route("/articles")
     @skip_authorization
     def articles_index():
