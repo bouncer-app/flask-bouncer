@@ -68,10 +68,10 @@ def test_not_allowed_index():
     doug = User(name='doug', admin=False)
     with user_set(app, doug):
         resp = client.get('/topsecret')
-        eq_(resp.status_code, 401)
+        eq_(resp.status_code, 403)
 
 def test_securing_specific_object():
     doug = User(name='doug', admin=False)
     with user_set(app, doug):
         resp = client.post('/article/1')
-        eq_(resp.status_code, 401)
+        eq_(resp.status_code, 403)

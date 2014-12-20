@@ -61,7 +61,7 @@ def test_delete():
     # Non Admins should NOT be able to delete articles
     with user_set(app, nancy):
         resp = client.delete("/article/1234")
-        eq_(resp.status_code, 401)
+        eq_(resp.status_code, 403)
 
 def test_get():
     # admins should be able to view
@@ -128,7 +128,7 @@ def test_overwritten_get():
     # Non admins not be able to do this
     with user_set(app, nancy):
         resp = client.get("/overwritten/1234")
-        eq_(resp.status_code, 401)
+        eq_(resp.status_code, 403)
 
 
 
