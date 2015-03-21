@@ -23,7 +23,7 @@ Usage
 
 .. code:: python
 
-    from flask.ext.bouncer import requires, ensure, Bouncer
+    from flask_bouncer import requires, ensure, Bouncer
     app = Flask()
     bouncer = Bouncer(app)
 
@@ -53,7 +53,7 @@ Usage
 
 .. code:: python
 
-    from flask.ext.bouncer import requires, ensure
+    from flask_bouncer import requires, ensure
     @app.route("/articles/<article_id>")
     @requires(READ, Article)
     def show_article(article_id):
@@ -99,7 +99,7 @@ class-based REST views to Flask.
 
 .. code:: python
 
-    from flask.ext.classy import FlaskView
+    from flask_classy import FlaskView
     from yourapp.models import Article
 
     class ArticleView(FlaskView)
