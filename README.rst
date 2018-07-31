@@ -134,8 +134,8 @@ class-based REST views to Flask.
 .. _g: http://flask.pocoo.org/docs/api/#flask.g
 .. _Flask-Classy: https://pythonhosted.org/Flask-Classy/
 
-.. |Build Status| image:: https://travis-ci.org/jtushman/flask-bouncer.svg?branch=master
-    :target: https://travis-ci.org/jtushman/flask-bouncer
+.. |Build Status| image:: https://travis-ci.org/bouncer-app/flask-bouncer.svg?branch=master
+    :target: https://travis-ci.org/bouncer-app/flask-bouncer
 
 Then voila – flask-bouncer will implicitly add the following conditions
 to the routes:
