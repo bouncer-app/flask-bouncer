@@ -23,7 +23,7 @@ def ensure(action, subject):
         msg = "{0} does not have {1} access to {2}".format(current_user, action, subject)
         raise Forbidden(msg)
 
-# alais
+# alias
 bounce = ensure
 
 
