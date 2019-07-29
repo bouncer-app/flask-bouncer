@@ -13,6 +13,7 @@
 dist
 build
 eggs
+.eggs
 parts
 bin
 var
@@ -42,3 +43,6 @@ nosetests.xml
 .DS_Store
 
 docs/_build
+
+# PyCharm defaults to this directory for virtualenv installations on windows
+venv
