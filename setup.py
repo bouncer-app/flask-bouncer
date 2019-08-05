@@ -5,7 +5,7 @@ required_modules = ['bouncer>=0.1.8', 'Flask>=0.9', 'blinker']
 setup(name='flask-bouncer',
       version='0.2.0',
       description='Flask Simple Declarative Authentication based on Ryan Bates excellent cancan library',
-      url='http://github.com/jtushman/flask-bouncer',
+      url='http://github.com/bouncer-app/flask-bouncer',
       author='Jonathan Tushman',
       author_email='jonathan@zefr.com',
       install_requires=required_modules,

@@ -130,7 +130,7 @@ class-based REST views to Flask.
     # Which classy views do you want to lock down, you can pass multiple
     bouncer.monitor(ArticleView)
 
-.. _bouncer: https://github.com/jtushman/bouncer
+.. _bouncer: https://github.com/bouncer-app/bouncer
 .. _g: http://flask.pocoo.org/docs/api/#flask.g
 .. _Flask-Classy: https://pythonhosted.org/Flask-Classy/
 
@@ -180,7 +180,7 @@ Questions / Issues
 ------------------
 
 Feel free to ping me on twitter: `@tushman`_
-or add issues or PRs at https://github.com/jtushman/flask-bouncer
+or add issues or PRs at https://github.com/bouncer-app/flask-bouncer
 
 .. _flask-login: http://flask-login.readthedocs.org/en/latest/
 .. _flask-classy: https://pythonhosted.org/Flask-Classy/
