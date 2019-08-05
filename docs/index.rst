@@ -37,7 +37,7 @@ Usage
             they.can(EDIT, 'Article', lambda a: a.author_id == user.id)
 
     # Then decorate your routes with your conditions.
-    # If it fails it will return a 401
+    # If it fails it will return a 403
     @app.route("/articles")
     @requires(READ, Article)
     def articles_index():
@@ -59,7 +59,7 @@ Usage
     def show_article(article_id):
         article = Article.find_by_id(article_id)
 
-        # can the current user 'read' the article, if not it will throw a 401
+        # can the current user 'read' the article, if not it will throw a 403
         ensure(READ,article)
         return render_template('article.html', article=article)
 
