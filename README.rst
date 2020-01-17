@@ -63,6 +63,22 @@ Usage
         ensure(READ,article)
         return render_template('article.html', article=article)
 
+-  When you want to conditionally check 
+   ``can`` method
+
+.. code:: python
+
+    from flask_bouncer import requires, can
+    @app.route("/articles/<article_id>")
+    @requires(READ, Article)
+    def show_article(article_id):
+        article = Article.find_by_id(article_id)
+
+        # can the current user 'read' the article
+        if can(MANAGE,  article):
+            return render_template('article-detailed.html', article=article)
+        return render_template('article.html')
+
 -  Check out `bouncer`_ with more details about defining Abilities
 -  flask-bouncer by default looks for ``current_user`` or ``user``
    stored in flask’s `g`_

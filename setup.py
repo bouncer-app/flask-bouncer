@@ -3,7 +3,7 @@ from setuptools import setup
 required_modules = ['bouncer>=0.1.8', 'Flask>=0.9', 'blinker']
 
 setup(name='flask-bouncer',
-      version='0.2.0',
+      version='0.3.0',
       description='Flask Simple Declarative Authentication based on Ryan Bates excellent cancan library',
       url='http://github.com/bouncer-app/flask-bouncer',
       author='Jonathan Tushman',
