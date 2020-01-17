@@ -23,6 +23,16 @@ def ensure(action, subject):
         msg = "{0} does not have {1} access to {2}".format(current_user, action, subject)
         raise Forbidden(msg)
 
+
+def can(action, subject):
+    request._authorized = True
+    current_user = _bouncer.get_current_user()
+    ability = Ability(current_user)
+    ability.authorization_method = _bouncer.get_authorization_method()
+    ability.aliased_actions = _bouncer.alias_actions
+    return ability.can(action, subject)
+
+
 # alias
 bounce = ensure
 
